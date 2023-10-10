@@ -4,6 +4,7 @@ using Core.Entities.Identity;
 using Core.Interfaces;
 using Infrastructre.Data.Identity;
 using Infrastructure.Repository;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,6 +26,8 @@ public class Program
         // Add services to the container.
         builder.Services.IdentityServices(builder.Configuration);
         builder.Services.AddScoped<ILoginTimeRepository,LoginTimeRepository>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -40,8 +43,8 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
-        //   app.UseAuthorization();
+        app.UseAuthentication();
+          app.UseAuthorization();
         //using var scope = app.Services.CreateScope();
         //{
         //    try

@@ -16,10 +16,12 @@ public class AccountController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly ITokenService _tokenService;
     private readonly ILoginTimeRepository _loginTime ;
 
-    public AccountController(ILoginTimeRepository loginTime, UserManager<AppUser> userManager,SignInManager<AppUser> signInManager)
+    public AccountController(ITokenService tokenService, ILoginTimeRepository loginTime, UserManager<AppUser> userManager,SignInManager<AppUser> signInManager)
     {
+         _tokenService = tokenService;
         _loginTime = loginTime;
 
         _userManager = userManager;
@@ -39,7 +41,7 @@ public class AccountController : ControllerBase
         return new UserDto
         {
             Email = loginDto.Email,
-            Token = "this will be a Token",
+            Token = _tokenService.CreateToken(user),
             UserName = user.UserName
         };
 
