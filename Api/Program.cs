@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using System;
+
 namespace Api;
 
 public class Program
@@ -7,6 +10,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
+            builder.Configuration.GetConnectionString
+            ("DefaultConnectionString")));
         // Add services to the container.
 
         builder.Services.AddControllers();

@@ -3,9 +3,9 @@ using Core.Specification;
 
 namespace Core.Interfaces;
 
-public interface IGenericRepository<T> where T:BaseEntity
+public interface IGenericRepository<T> where T:class
 {
-   Task<IReadOnlyList<T>>  ListAllAsync();
+    Task<IReadOnlyList<T>>  ListAllAsync();
     Task<T?> GetByIdAsync(int id);
     Task<T?> GetEntityWithSpec(ISpecification<T> spec);
     Task<List<T>> ListAsync(ISpecification<T> spec);

@@ -1,16 +1,15 @@
 ﻿using Core.Entities;
 namespace Core.Specification;//Data.Specification;
 
-public class ProductsWithBrandsAndTypes : Specification<Product>
+public class ProductsWithCategories : Specification<Product>
 {
-    public ProductsWithBrandsAndTypes(ProductSpecParams productParams)
+    public ProductsWithCategories(ProductSpecParams productParams)
         : base(x =>
         (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
-        (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-        (!productParams.ProductTypeId.HasValue || x.ProductTypeId == productParams.ProductTypeId))
+        (!productParams.ProductTCategoryId.HasValue || x.ProductCategoryId == productParams.ProductTCategoryId) )
     {
-        AddInclude(x => x.productType);
-        AddInclude(x => x.productBrand);
+        AddInclude(x => x.ProductCategory);
+       
         AddOrderBy(x => x.Name);//Add Order by Alpha by Default
         ApplyPaging(productParams.pageSize * (productParams.indexPage - 1), productParams.pageSize);
 
@@ -29,10 +28,5 @@ public class ProductsWithBrandsAndTypes : Specification<Product>
         }
 
     }
-    public ProductsWithBrandsAndTypes(int id)
-        : base(x => x.Id == id)
-    {
-        AddInclude(x => x.productType);
-        AddInclude(x => x.productBrand);
-    }
+
 }
