@@ -24,46 +24,22 @@ public class AccountController : ControllerBase
     {
          _tokenService = tokenService;
         _loginTime = loginTime;
-
         _userManager = userManager;
         _signInManager = signInManager;
     }
 
-    //[Authorize]
-    //public async Task<ActionResult<UserDto>> GetCurrentUser()
-    //{
-    //    var email = User.FindFirstValue(ClaimTypes.Email);
-    //    var user = await _userManager.FindByEmailAsync(email);
-    //      return new UserDto
-    //    {
-    //        Email = user.Email,
-    //        Token = _tokenService.CreateToken(user),
-    //        UserName = user.UserName
-    //    };
-
-    //}
+   
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
         if (user == null) return Unauthorized("Passowrd or Email has been wrong");
-        
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
         if (!result.Succeeded) return Unauthorized("Passowrd or Email has been wrong");
 
-
-
-
         await _loginTime.AddLoginTime(user);
         return await _tokenService.RefreshTokenAsync(loginDto.Email);
-        //{
-        //    Email = loginDto.Email,
-        //    Token = _tokenService.CreateToken(user),
-        //    UserName = user.UserName
-        //};
-
-
 
     }
     [HttpPost("register")]
