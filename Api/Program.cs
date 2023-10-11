@@ -2,6 +2,7 @@
 using API.Extensions;
 using Core.Entities.Identity;
 using Core.Interfaces;
+using Infrastructre.Data;
 using Infrastructre.Data.Identity;
 using Infrastructure.Repository;
 using Infrastructure.Services;
@@ -27,6 +28,7 @@ public class Program
         builder.Services.IdentityServices(builder.Configuration);
         builder.Services.AddScoped<ILoginTimeRepository,LoginTimeRepository>();
         builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
