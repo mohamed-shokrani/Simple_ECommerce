@@ -6,5 +6,7 @@ namespace Core.Interfaces;
 
 public interface IProductRepository
 {
+    Task<IReadOnlyList<ProductCategory>> GetAllCategories();
     Task<PageList<Product>> GetAllProductsAsync(ProductParams productParams);
+    Task<Product> GetSingleById(int id);
 }

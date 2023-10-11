@@ -28,13 +28,21 @@ public class ProductRepository : IProductRepository
             query = query.Where(x => x.ProductCategoryId == productParams.CategoryId);
         }
         query = productParams.OrderBy switch
-            {
-                "priceAsc" => query.OrderBy(x => x.Price),
-                "priceDsc" => query.OrderByDescending(x => x.Price),
-                 _ => query.OrderBy(x => x.Name),
-            };
-        return await PageList<Product>.CreateAsync(query
-                                          ,productParams.PageNumber, productParams.PageSize);
-            
+        {
+            "priceAsc" => query.OrderBy(x => x.Price),
+            "priceDsc" => query.OrderByDescending(x => x.Price),
+            _ => query.OrderBy(x => x.Name),
+        };
+        return await PageList<Product>.CreateAsync(query.AsNoTracking()
+                                          , productParams.PageNumber, productParams.PageSize); ;
     }
+    public async Task<Product> GetSingleById(int id)
+
+      => await _dbContext.Products.AsNoTracking().FirstOrDefaultAsync(x => x.ProductCode == id);
+
+   public async Task<IReadOnlyList<ProductCategory>> GetAllCategories()
+     => await _dbContext.ProductCategories.AsNoTracking().ToListAsync();
+
+
+
 }

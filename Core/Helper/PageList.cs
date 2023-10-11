@@ -20,14 +20,11 @@ public class PageList<T> :List<T>//make it generic so it can take any entity lik
     public int TotalPage { get; set; }
     public int PageSize { get; set;}
 
-   public int TotatCount { get; set; }//How many items are in this query this could be all of our
-    //users so we do not do any paging or based on our query like to get all of female users
-    // then it will be hom many of total female users are available and that's what goes in the total count
-
+   public int TotatCount { get; set; }
     public static async Task<PageList<T>> CreateAsync(IQueryable<T> sourceData, int pageNumber, int pageSize)
-    {//this is gonna receive our query where we work out the pagination info
+    {
 
-        var count = await sourceData.CountAsync();//count means whow many items are left from this query
+        var count = await sourceData.CountAsync();
         var items =await sourceData.Skip((pageNumber -1)*pageSize).Take(pageSize).ToListAsync();
         return new PageList<T>(items, count, pageNumber, pageSize);
 

@@ -1,25 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Core.Attributes;
+using Core.Constants;//.DataAnnotations;
 
 namespace Core.Entities;
 
 public class Product 
 {
-    private int _minimumQuantity;
-
     [Key]
     public int ProductCode { get; set; }
-    public int MinimumQuantity
-    {
-        get { return _minimumQuantity; }
-        set
-        {
-            if (value < 4)
-            {
-                throw new ArgumentException("Minimum quantity cannot be less than 4.");
-            }
-            _minimumQuantity = value;
-        }
-    }
+
+    [MinimumQuantity(ErrorMessage = "The minimum quantity cannot be less than 4.")]
+    public int MinimumQuantity { get; set; }
 
     [Required,MaxLength(100)]
     public string Name { get; set; } = string.Empty;
@@ -29,6 +20,8 @@ public class Product
     [Required]
 
     public decimal Price { get; set; }
+    public decimal DiscountRate { get; set; } = ConstantForProducts.DiscountFifteenPercent;
+
     [Required, MaxLength(500)]
     public string PictureUrl { get; set; } = string.Empty;
 

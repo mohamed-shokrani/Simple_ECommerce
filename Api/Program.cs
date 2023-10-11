@@ -1,5 +1,5 @@
 
-using API.Extensions;
+using Api.Extensions;
 using Core.Entities.Identity;
 using Core.Interfaces;
 using Infrastructre.Data;
@@ -17,23 +17,10 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-
-        builder.Services.AddDbContext<AppIdentityDbContext>(x=>
-                x.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
-        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
-            builder.Configuration.GetConnectionString
-            ("DefaultConnectionString")));
         // Add services to the container.
         builder.Services.IdentityServices(builder.Configuration);
-        builder.Services.AddScoped<ILoginTimeRepository,LoginTimeRepository>();
-        builder.Services.AddScoped<ITokenService, TokenService>();
-        builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AppDbContextServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
 
         var app = builder.Build();
 
@@ -44,20 +31,15 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseCors(x => x.AllowAnyHeader()
+                         .AllowAnyMethod()
+                         .WithOrigins("http://localhost:4200"));
+
         app.UseHttpsRedirection();
         app.UseAuthentication();
-          app.UseAuthorization();
-        //using var scope = app.Services.CreateScope();
-        //{
-        //    try
-        //    {
-        //        var userManager = app.Services.GetRequiredService<UserManager<AppUser>>();
-        //        var identityContext = app.Services.GetService<ap>
+        app.UseAuthorization();
 
-        //    }
-        //    catch { 
-        //    }
-            app.MapControllers();
+        app.MapControllers();
 
         app.Run();
     }
