@@ -11,8 +11,9 @@ namespace Core.Entities.Identity;
 public class AppUser :IdentityUser
 {
     public string Address  { get; set; }
-    
-  //  public ICollection<ApplicationUserLogin> Logins { get; set; }
+    public List<RefreshToken>? RefreshTokens   { get; set; }
+
+    //  public ICollection<ApplicationUserLogin> Logins { get; set; }
 
 
 }

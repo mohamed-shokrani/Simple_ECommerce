@@ -1,4 +1,5 @@
-﻿using Core.Entities.Identity;
+﻿using Core.DTOs;
+using Core.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,5 +9,6 @@ using System.Threading.Tasks;
 namespace Core.Interfaces;
 public interface ITokenService
 {
+    Task<UserDto> RefreshTokenAsync(string token);
     string CreateToken(AppUser user);
 }
